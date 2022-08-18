@@ -8,9 +8,7 @@ import com.secondworld.buenas.weathermaxtest.core.extension.log
 import com.secondworld.buenas.weathermaxtest.domain.entity.CityFavouriteDomain
 import com.secondworld.buenas.weathermaxtest.domain.interactor.WeatherInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +31,7 @@ class FavouriteViewModel @Inject constructor(
 
     fun deleteCity(city: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            delCityBd(city)
+            delCityBd(city).join()
             getAllCities()
         }
     }
