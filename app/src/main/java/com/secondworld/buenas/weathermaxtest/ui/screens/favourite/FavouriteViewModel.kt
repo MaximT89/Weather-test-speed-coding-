@@ -24,21 +24,20 @@ class FavouriteViewModel @Inject constructor(
     }
 
     fun fetchCitiesFromBd() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             getAllCities()
         }
     }
 
     fun deleteCity(city: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            delCityBd(city).join()
+        viewModelScope.launch {
+            delCityBd(city)
             getAllCities()
         }
     }
 
-    suspend fun getAllCities() = withContext(Dispatchers.IO) {
+    private suspend fun getAllCities() = withContext(Dispatchers.IO) {
         val list = interactor.getAllCitiesFromFavourite()
-        log("getAllCities")
         _listCities.postValue(list)
 
         withContext(Dispatchers.Main) {
@@ -50,10 +49,7 @@ class FavouriteViewModel @Inject constructor(
         }
     }
 
-    suspend fun delCityBd(city: String) = withContext(Dispatchers.IO) {
-        log("delCityBd")
-        viewModelScope.launch(Dispatchers.IO) {
-            interactor.deleteCityFromFavourite(city)
-        }
+    private suspend fun delCityBd(city: String) = withContext(Dispatchers.IO){
+        interactor.deleteCityFromFavourite(city)
     }
 }
